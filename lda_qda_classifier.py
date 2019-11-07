@@ -5,8 +5,7 @@
 
 import numpy as np
 from numpy import linalg
-import pandas as pd
-from sklearn.metrics import accuracy_score
+# from sklearn.metrics import accuracy_score
 
 class lda_qda_classifier(object):
     def __init__(self, cov_dict = None, probs_dict = None, 
