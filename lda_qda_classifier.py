@@ -48,7 +48,7 @@ class lda_qda_classifier(object):
         if self.mu_dict is None:
             self.get_means(X)
     
-    def predict(self, X):
+    def predict_class(self, X):
         self.classified = []
         for x in X:
             scores_list = []
@@ -62,56 +62,57 @@ class lda_qda_classifier(object):
 
                 
 
-## TESTING    
+# TESTING    
 #Data Setup
 
+# sigma = 0.5
+# J = 3
+# N = 100
 
-sigma = 0.5
-J = 3
-N = 100
+# rho_dict = {}
+# for i in range(1,J+1):
+#     rho = 0.25 + (i-1)*0.25
+#     rho_dict[i-1] = rho
 
-rho_dict = {}
-for i in range(1,J+1):
-    rho = 0.25 + (i-1)*0.25
-    rho_dict[i-1] = rho
-
-cov_dict = {}
-for i in range(J):
-    cov = np.array([[1,rho_dict[i]],[rho_dict[i],1]]) * (sigma**2)
-    cov_dict[i] = cov
+# cov_dict = {}
+# for i in range(J):
+#     cov = np.array([[1,rho_dict[i]],[rho_dict[i],1]]) * (sigma**2)
+#     cov_dict[i] = cov
     
-probs_dict = {0:0.6,1:0.3,2:0.1}
+# probs_dict = {0:0.6,1:0.3,2:0.1}
 
-mu1 = [0, 1]
-x1, y1 = np.random.multivariate_normal(mu1, cov_dict[0], int(N*probs_dict[0])).T
+# mu1 = [0, 1]
+# x1, y1 = np.random.multivariate_normal(mu1, cov_dict[0], int(N*probs_dict[0])).T
 
-mu2 = [1, 0]
-x2, y2 = np.random.multivariate_normal(mu2, cov_dict[1], int(N*probs_dict[1])).T
+# mu2 = [1, 0]
+# x2, y2 = np.random.multivariate_normal(mu2, cov_dict[1], int(N*probs_dict[1])).T
 
-mu3 = [-1, 1]
-x3, y3 = np.random.multivariate_normal(mu3, cov_dict[2], int(N*probs_dict[2])).T
+# mu3 = [-1, 1]
+# x3, y3 = np.random.multivariate_normal(mu3, cov_dict[2], int(N*probs_dict[2])).T
 
-mu_list = [mu1,mu2,mu3]
-
-
-# Generate Data
-X = np.asarray(np.vstack((np.hstack((x1,x2,x3)),np.hstack((y1,y2,y3)))).T)
-y = np.hstack((np.zeros(int(N*probs_dict[0])),np.ones(int(N*probs_dict[1])),np.ones(int(N*probs_dict[2]))*2))
+# mu_list = [mu1,mu2,mu3]
 
 
-
-LDA = lda_qda_classifier(probs_dict = probs_dict, cov_dict=cov_dict)
-LDA.fit(X,y)
-print(LDA.classes_dict)
-print(LDA.probs_dict)
-print(LDA.cov_dict)
-print(LDA.mu_dict)
-LDA.predict(X)
-
-QDA = lda_qda_classifier(probs_dict = probs_dict, cov_dict = cov_dict,QDA=True)
-QDA.fit(X,y)
-QDA.predict(X)
+# # Generate Data
+# X = np.asarray(np.vstack((np.hstack((x1,x2,x3)),np.hstack((y1,y2,y3)))).T)
+# y = np.hstack((np.zeros(int(N*probs_dict[0])),np.ones(int(N*probs_dict[1])),np.ones(int(N*probs_dict[2]))*2))
 
 
-print(accuracy_score(y,LDA.classified))
-print(accuracy_score(y,QDA.classified))
+
+# LDA = lda_qda_classifier(probs_dict = probs_dict, cov_dict=cov_dict)
+# LDA.fit(X,y)
+# print(LDA.classes_dict)
+# print(LDA.probs_dict)
+# print(LDA.cov_dict)
+# print(LDA.mu_dict)
+# LDA.predict_class(X)
+
+# QDA = lda_qda_classifier(probs_dict = probs_dict, cov_dict = cov_dict,QDA=True)
+# QDA.fit(X,y)
+# QDA.predict_class(X)
+
+
+# print(accuracy_score(y,LDA.classified))
+# print(accuracy_score(y,QDA.classified))
+
+
