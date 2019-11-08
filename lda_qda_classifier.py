@@ -5,7 +5,7 @@
 
 import numpy as np
 from numpy import linalg
-# from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score
 
 class lda_qda_classifier(object):
     def __init__(self, cov_dict = None, probs_dict = None, 
@@ -48,21 +48,25 @@ class lda_qda_classifier(object):
             self.get_means(X)
     
     def predict_class(self, X):
-        self.classified = []
-        for x in X:
-            scores_list = []
+        self.score_list = []
+        if self.QDA:
             for p in self.classes_dict.keys():
-                if not self.QDA:
-                    score = x.T.dot(linalg.inv(self.cov_dict[0])).dot(self.mu_dict[p])-(0.5)*np.array(self.mu_dict[p]).T.dot(linalg.inv(self.cov_dict[0])).dot(self.mu_dict[p])+np.log(self.probs_dict[p])
-                else:
-                    score = (-0.5)*(x-self.mu_dict[p]).T.dot(linalg.inv(self.cov_dict[p])).dot(x-self.mu_dict[p])-(0.5)*np.log(linalg.det(self.cov_dict[p]))+np.log(self.probs_dict[p])
-                scores_list.append(score)
-            self.classified.append(np.argmax(scores_list))
+                score = list(map(lambda x: ((-0.5)*(x-self.mu_dict[p])).T.dot(linalg.inv(self.cov_dict[p])).dot(x-self.mu_dict[p])-(0.5)*np.log(linalg.det(self.cov_dict[p]))+np.log(self.probs_dict[p]), X))
+                self.score_list.append(score)
 
+        else:
+            for p in self.classes_dict.keys():
+                score = list(map(lambda x: x.T.dot(linalg.inv(self.cov_dict[0])).dot(self.mu_dict[p])-(0.5)*np.array(self.mu_dict[p]).T.dot(linalg.inv(self.cov_dict[0])).dot(self.mu_dict[p])+np.log(self.probs_dict[p]), X))
+                self.score_list.append(score)
+
+        self.score_list = np.array(list(zip(*self.score_list)))
+        self.classified = np.argmax(self.score_list,axis=1)
+    
+    
                 
 
 # TESTING    
-#Data Setup
+# Data Setup
 
 # sigma = 0.5
 # J = 3
@@ -89,7 +93,7 @@ class lda_qda_classifier(object):
 # mu3 = [-1, 1]
 # x3, y3 = np.random.multivariate_normal(mu3, cov_dict[2], int(N*probs_dict[2])).T
 
-# mu_list = [mu1,mu2,mu3]
+# mu_dict = {0:mu1, 1:mu2, 2:mu3}
 
 
 # # Generate Data
@@ -98,7 +102,8 @@ class lda_qda_classifier(object):
 
 
 
-# LDA = lda_qda_classifier(probs_dict = probs_dict, cov_dict=cov_dict)
+
+# LDA = lda_qda_classifier(probs_dict = probs_dict, cov_dict=cov_dict, mu_dict = mu_dict)
 # LDA.fit(X,y)
 # print(LDA.classes_dict)
 # print(LDA.probs_dict)
@@ -106,12 +111,12 @@ class lda_qda_classifier(object):
 # print(LDA.mu_dict)
 # LDA.predict_class(X)
 
-# QDA = lda_qda_classifier(probs_dict = probs_dict, cov_dict = cov_dict,QDA=True)
+# QDA = lda_qda_classifier(probs_dict = probs_dict, cov_dict = cov_dict,mu_dict = mu_dict,QDA=True)
 # QDA.fit(X,y)
 # QDA.predict_class(X)
 
-
 # print(accuracy_score(y,LDA.classified))
 # print(accuracy_score(y,QDA.classified))
+
 
 
