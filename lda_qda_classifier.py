@@ -61,12 +61,14 @@ class lda_qda_classifier(object):
 
         self.score_list = np.array(list(zip(*self.score_list)))
         self.classified = np.argmax(self.score_list,axis=1)
+        
+        return self.classified
     
     
                 
 
-# TESTING    
-# Data Setup
+# # TESTING    
+# # Data Setup
 
 # sigma = 0.5
 # J = 3
@@ -105,18 +107,20 @@ class lda_qda_classifier(object):
 
 # LDA = lda_qda_classifier(probs_dict = probs_dict, cov_dict=cov_dict, mu_dict = mu_dict)
 # LDA.fit(X,y)
-# print(LDA.classes_dict)
-# print(LDA.probs_dict)
-# print(LDA.cov_dict)
-# print(LDA.mu_dict)
-# LDA.predict_class(X)
+# # print(LDA.classes_dict)
+# # print(LDA.probs_dict)
+# # print(LDA.cov_dict)
+# # print(LDA.mu_dict)
+# print(LDA.predict_class(X))
 
 # QDA = lda_qda_classifier(probs_dict = probs_dict, cov_dict = cov_dict,mu_dict = mu_dict,QDA=True)
 # QDA.fit(X,y)
-# QDA.predict_class(X)
+# print(QDA.predict_class(X))
 
 # print(accuracy_score(y,LDA.classified))
 # print(accuracy_score(y,QDA.classified))
+
+
 
 
 
